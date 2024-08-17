@@ -11,7 +11,6 @@ class OpenAI:
         self.model = model
         self.temperature = temperature
         self.client = openai.OpenAI()
-        self.async_client = openai.AsyncOpenAI()
 
     @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(3))
     def send_message(

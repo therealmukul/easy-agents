@@ -1,3 +1,4 @@
 openai
 httpx
 tenacity
+wikipedia-api
