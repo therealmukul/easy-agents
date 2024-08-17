@@ -6,7 +6,10 @@ import httpx
 
 class BaseAgent:
 
-    def __init__(self, model="gpt-4o-mini", system_prompt: str = ""):
+    def __init__(
+        self, client: openai.OpenAI, model="gpt-4o-mini", system_prompt: str = ""
+    ):
+        self.client = client
         self.model = model
         self.system_prompt = system_prompt
         self.messages = []
@@ -20,11 +23,11 @@ class BaseAgent:
         self.messages.append({"role": "assistant", "content": results})
 
         return results
-    
+
     def execute(self):
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model=self.model,
             messages=self.messages,
         )
-        
+
         return response.choices[0].message.content
