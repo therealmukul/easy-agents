@@ -62,45 +62,17 @@ class Agent:
 
             if actions:
                 action, actions_input = actions[0].groups()
-                
-                if action in self.tools:
-                    print(f'-' * 10)
-                    print(f'Tool call:')
-                    print(f'\tName: {action}')
-                    print(f'\tInput: {actions_input}')
-                    print(f'-' * 10)
 
+                if action in self.tools:
+                    print(f"-" * 10)
+                    print(f"Tool call:")
+                    print(f"\tName: {action}")
+                    print(f"\tInput: {actions_input}")
                     observation = self.tools[action].function(actions_input)
+                    print(f"\tOutput: {observation}")
+                    print(f"-" * 10)
+
                     print(f"Observation: {observation}")
                     next_message = f"Observation: {observation}"
             else:
                 return agent_response
-
-
-class BaseAgent:
-
-    def __init__(
-        self, client: openai.OpenAI, model="gpt-4o-mini", system_prompt: str = ""
-    ):
-        self.client = client
-        self.model = model
-        self.system_prompt = system_prompt
-        self.messages = []
-
-        if self.system_prompt:
-            self.messages.append({"role": "system", "content": self.system_prompt})
-
-    def __call__(self, message: str):
-        self.messages.append({"role": "user", "content": message})
-        results = self.execute()
-        self.messages.append({"role": "assistant", "content": results})
-
-        return results
-
-    def execute(self):
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=self.messages,
-        )
-
-        return response.choices[0].message.content
