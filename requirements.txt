@@ -2,3 +2,4 @@ openai
 httpx
 tenacity
 wikipedia-api
+python-dotenv
